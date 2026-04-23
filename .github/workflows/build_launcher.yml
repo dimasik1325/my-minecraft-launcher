@@ -1,0 +1,36 @@
+name: Build Minecraft Launcher
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install MSYS2 and Dependencies
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: MINGW64
+        update: true
+        install: >-
+          mingw-w64-x86_64-gcc
+          mingw-w64-x86_64-curl
+          mingw-w64-x86_64-zlib
+
+    - name: Compile Launcher
+      shell: msys2 {0}
+      run: |
+        g++ launcher_core.cpp -o launcher.exe \
+        -lcurl -lz -lcomctl32 -lgdi32 -lws2_32 -mwindows
+
+    - name: Upload Launcher Executable
+      uses: actions/upload-artifact@v4
+      with:
+        name: MinecraftLauncher-EXE
+        path: launcher.exe
