@@ -26,7 +26,7 @@ jobs:
     - name: Compile Launcher
       shell: msys2 {0}
       run: |
-        g++ launcher_core.cpp -o launcher.exe \
+        g++ HolyLaucnher.cpp -o launcher.exe \
         -lcurl -lz -lcomctl32 -lgdi32 -lws2_32 -mwindows
 
     - name: Upload Launcher Executable
